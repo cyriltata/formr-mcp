@@ -1,0 +1,25 @@
+services:
+  formr-mcp:
+    build: .
+    image: formr-mcp:0.2.0
+    container_name: formr-mcp
+    restart: unless-stopped
+    init: true
+    stop_grace_period: 15s
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:${FORMR_MCP_PORT:-3001}:${FORMR_MCP_PORT:-3001}"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
